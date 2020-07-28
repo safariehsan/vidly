@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { isArguments } from "lodash";
 // columns: array
 // sortColumn: object
 // onSort: function
@@ -32,9 +33,9 @@ class TableHeader extends Component {
   };
   renderSortIcon = column => {
     const {sortColumn} = this.props;
-    if(column.path !== sortColumn.path) return <i className="fa fa-sort"></i>;
+    if(column.path !== sortColumn.path) return <i className="fa fa-sort"></i>
     if(sortColumn.order === 'asc') return <i className="fa fa-sort-asc"></i>
-    else return <i className="fa fa-sort-desc"></i>
+    if(sortColumn.order === 'desc') return <i className="fa fa-sort-desc"></i>
   }
   render() {
     return (

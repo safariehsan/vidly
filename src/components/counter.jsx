@@ -39,7 +39,7 @@ class Counter extends Component {
     console.log("counter render");
     return (
       <React.Fragment>
-        <main className="container">
+       
           {this.props.children}
           {this.props.counterId}
           <br />
@@ -82,7 +82,7 @@ class Counter extends Component {
             </div>
           </div>
           <hr />
-        </main>
+      
       </React.Fragment>
     );
   }

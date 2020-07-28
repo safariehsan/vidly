@@ -1,64 +1,33 @@
 import React, { Component } from "react";
-import NavBar from "./components/navbar";
-import Counters from "./components/counters";
+import { Route, Redirect, Switch } from "react-router-dom";
+import Movies from "./components/movies";
+import Counter from "./counter";
+import Rentals from "./pages/rentals";
+import LoginForm from "./components/loginForm";
+import RegisterForm from "./components/registerForm";
+import Home from "./pages/home";
+import NotFound from "./pages/notFound";
+import NavBar from "./components/common/navbar";
+import "./App.css";
+import MovieForm from "./pages/movieForm";
 
 class App extends Component {
-  state = {
-    lessthanzero: false,
-    counters: [
-      {
-        id: 0,
-        value: 2,
-      },
-      {
-        id: 1,
-        value: 0,
-      },
-      {
-        id: 2,
-        value: 6,
-      },
-    ],
-  };
-  constructor(props) {
-    super(props);
-    console.log("app constructor");
-    //this.state = this.props.something;
-  }
-  componentDidMount() {
-    // Ajax call
-    console.log("app didmount");
-  }
-  handleDelete = (counterId) => {
-    const counters = this.state.counters.filter((c) => c.id !== counterId);
-    this.setState({
-      counters,
-    });
-  };
-  handleIncrement = (counterId) => {
-    const counters = [...this.state.counters];
-    const index = counters.findIndex((c) => c.id == counterId);
-    counters[index].value++;
-    this.setState({ counters });
-  };
-  handleDecrement = (counterId) => {
-    const counters = [...this.state.counters];
-    const index = counters.findIndex((c) => c.id == counterId);
-    counters[index].value--;
-    this.setState({ counters });
-  };
   render() {
-    console.log("app render");
     return (
       <React.Fragment>
-        <NavBar total={this.state.counters.filter((c) => c.value > 0)} />
+        <NavBar />
         <main className="container">
-          <Counters
-            counters={this.state.counters}
-            onDelete={this.handleDelete}
-            onIncrement={this.handleIncrement}
-            onDecrement={this.handleDecrement}
-          />
+          <Switch>
+            <Route path="/movies/:id" component={MovieForm}></Route>
+            <Route path="/movies" component={Movies}></Route>
+            <Route path="/counter" component={Counter}></Route>
+            <Route path="/rentals" component={Rentals}></Route>
+            <Route path="/login" component={LoginForm}></Route>
+            <Route path="/register" component={RegisterForm}></Route>
+            <Route path="/not-found" component={NotFound}></Route>
+            <Route path="/" exact component={Home}></Route>
+            <Redirect to="/not-found" />
+          </Switch>
         </main>
       </React.Fragment>
     );
