@@ -7,7 +7,7 @@ import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
 import Home from "./pages/home";
 import NotFound from "./pages/notFound";
-import NavBar from "./components/common/navbar";
+import NavBar from "./components/common/navBar";
 import "./App.css";
 import MovieForm from "./pages/movieForm";
 
