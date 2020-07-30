@@ -8,14 +8,19 @@ import RegisterForm from "./components/registerForm";
 import Home from "./pages/home";
 import NotFound from "./pages/notFound";
 import NavBar from "./components/common/navBar";
-import "./App.css";
 import MovieForm from "./pages/movieForm";
+import { ToastContainer } from "react-toastify";
+import logger from './services/logService';
+import "./App.css";
+
+logger.init();
 
 class App extends Component {
   render() {
     return (
       <React.Fragment>
         <NavBar />
+        <ToastContainer />
         <main className="container">
           <Switch>
             <Route path="/movies/:id" component={MovieForm}></Route>

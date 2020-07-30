@@ -1,6 +1,7 @@
 import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
+import { toast } from "react-toastify";
 
 class LoginForm extends Form {
   state = {
@@ -17,7 +18,7 @@ class LoginForm extends Form {
 
   doSubmit = () => {
     // call the server
-    console.log("Submitted");
+    toast.success("Login Successful");
   };
 
   render() {

@@ -8,6 +8,9 @@ import MoviesTable from "./moviesTable";
 import _ from "lodash";
 import { Link } from "react-router-dom";
 import SearchBox from "./common/searchBox";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default class Movies extends Component {
   state = {
     movies: [],
@@ -22,15 +25,19 @@ export default class Movies extends Component {
     this.setState({ movies: getMovies(), genres });
   }
   handleDelete = (movie) => {
+    const deletedMovieTitle = this.state.movies.find((m) => m._id === movie._id).title;
     const result_movies = this.state.movies.filter((m) => m._id !== movie._id);
     this.setState({ movies: result_movies });
+    toast.error(deletedMovieTitle+" Deleted!");
   };
   handleLike = (movie) => {
-    //console.log("you like this movie: ", movie);
     const movies = [...this.state.movies];
     const index = movies.findIndex((c) => c._id === movie._id);
     movies[index].liked = !movies[index].liked;
+    const likedMovieTitle = movies[index].title;
     this.setState({ movies });
+    //toast.success("«" + likedMovieTitle + "» Liked");
+    toast.success(`«${likedMovieTitle}» Liked`);
   };
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
