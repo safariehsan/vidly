@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { getMovies } from "../services/fakeMovieService";
-import { getGenres } from "../services/fakeGenreService";
+import { getMovies, deleteMovie } from "../services/movieService";
+import { getGenres } from "../services/genreService";
 import Pagination from "./common/pagination";
 import paginate from "./utils/paginate";
 import ListGroup from "./common/listGroup";
@@ -9,7 +9,6 @@ import _ from "lodash";
 import { Link } from "react-router-dom";
 import SearchBox from "./common/searchBox";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default class Movies extends Component {
   state = {
@@ -20,15 +19,28 @@ export default class Movies extends Component {
     selectedGenre: null,
     sortColumn: { path: "title", order: "asc" },
   };
-  componentDidMount() {
-    const genres = [{ _id: "", name: "All Genres" }, ...getGenres()];
-    this.setState({ movies: getMovies(), genres });
+  async componentDidMount() {
+    const { data } = await getGenres();
+    const { data: movies } = await getMovies();
+    const genres = [{ _id: "", name: "All Genres" }, ...data];
+    this.setState({ movies, genres });
   }
-  handleDelete = (movie) => {
-    const deletedMovieTitle = this.state.movies.find((m) => m._id === movie._id).title;
-    const result_movies = this.state.movies.filter((m) => m._id !== movie._id);
-    this.setState({ movies: result_movies });
-    toast.error(deletedMovieTitle+" Deleted!");
+  handleDelete = async (movie) => {
+    const originalMovies = this.state.movies;
+    const deletedMovieTitle = this.state.movies.find((m) => m._id === movie._id)
+      .title;
+    const movies = originalMovies.filter((m) => m._id !== movie._id);
+    this.setState({ movies });
+    
+    try {
+      await deleteMovie(movie._id);
+      toast.error(`«${deletedMovieTitle}» Deleted`);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        toast.error("This movie has already been deleted");
+        this.setState({ movies: originalMovies });
+      }
+    }
   };
   handleLike = (movie) => {
     const movies = [...this.state.movies];
@@ -36,7 +48,6 @@ export default class Movies extends Component {
     movies[index].liked = !movies[index].liked;
     const likedMovieTitle = movies[index].title;
     this.setState({ movies });
-    //toast.success("«" + likedMovieTitle + "» Liked");
     toast.success(`«${likedMovieTitle}» Liked`);
   };
   handlePageChange = (page) => {
@@ -120,8 +131,8 @@ export default class Movies extends Component {
               onSort={this.handleSort}
               sortColumn={sortColumn}
             />
-            <div className="row">
-              <div className="col-sm-8">
+            <div className="d-flex">
+              <div className="">
                 <Pagination
                   itemsCount={totalCount}
                   pageSize={pageSize}
@@ -129,7 +140,7 @@ export default class Movies extends Component {
                   currentPage={currentPage}
                 />
               </div>
-              <div className="col-sm-4 text-right">
+              <div className="ml-auto">
                 <span className="alert alert-info py-2">
                   <b>{totalCount}</b> movie(s) in the list
                 </span>

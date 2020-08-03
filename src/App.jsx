@@ -11,16 +11,17 @@ import NavBar from "./components/common/navBar";
 import MovieForm from "./pages/movieForm";
 import { ToastContainer } from "react-toastify";
 import logger from './services/logService';
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
-logger.init();
+logger.init(); // using Sentry.io for capturing Error logs
 
 class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <NavBar />
         <ToastContainer />
+        <NavBar />
         <main className="container">
           <Switch>
             <Route path="/movies/:id" component={MovieForm}></Route>

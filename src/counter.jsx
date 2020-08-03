@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import NavBar from "./components/navbar";
 import Counters from "./components/counters";
+import Jumbotron from './components/jumbotron';
 
 class Counter extends Component {
   state = {
@@ -37,13 +37,13 @@ class Counter extends Component {
   };
   handleIncrement = (counterId) => {
     const counters = [...this.state.counters];
-    const index = counters.findIndex((c) => c.id == counterId);
+    const index = counters.findIndex((c) => c.id === counterId);
     counters[index].value++;
     this.setState({ counters });
   };
   handleDecrement = (counterId) => {
     const counters = [...this.state.counters];
-    const index = counters.findIndex((c) => c.id == counterId);
+    const index = counters.findIndex((c) => c.id === counterId);
     counters[index].value--;
     this.setState({ counters });
   };
@@ -51,7 +51,7 @@ class Counter extends Component {
     console.log("app render");
     return (
       <React.Fragment>
-        <NavBar total={this.state.counters.filter((c) => c.value > 0)} />
+        <Jumbotron total={this.state.counters.filter((c) => c.value > 0)} />
         <main className="container">
           <Counters
             counters={this.state.counters}

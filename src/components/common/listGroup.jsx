@@ -19,7 +19,7 @@ const ListGroup = (props) => {
           className={
             item === selectedItem
               ? "list-group-item list-group-item-action active"
-              : "list-group-item list-group-item-action"
+              : "list-group-item list-group-item-action "
           }
         >
           {item[textProperty]}

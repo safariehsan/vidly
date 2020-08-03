@@ -35,6 +35,12 @@ table th:nth-child(6) i {
     display: none;
 }
 
+input#liked {
+    width: auto;
+    margin-left: 5px;
+    display: inline;
+}
+
 
 /* .badge {
     display: inline-block;
