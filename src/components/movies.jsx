@@ -9,6 +9,7 @@ import _ from "lodash";
 import { Link } from "react-router-dom";
 import SearchBox from "./common/searchBox";
 import { toast } from "react-toastify";
+import Modal from "./modal";
 
 export default class Movies extends Component {
   state = {
@@ -31,7 +32,7 @@ export default class Movies extends Component {
       .title;
     const movies = originalMovies.filter((m) => m._id !== movie._id);
     this.setState({ movies });
-    
+
     try {
       await deleteMovie(movie._id);
       toast.error(`«${deletedMovieTitle}» Deleted`);
@@ -48,7 +49,10 @@ export default class Movies extends Component {
     movies[index].liked = !movies[index].liked;
     const likedMovieTitle = movies[index].title;
     this.setState({ movies });
-    toast.success(`«${likedMovieTitle}» Liked`);
+    if(movies[index].liked) {
+      toast.success(`«${likedMovieTitle}» Liked`);
+    }
+    else toast.error(`«${likedMovieTitle}» UnLiked`);
   };
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
@@ -88,6 +92,7 @@ export default class Movies extends Component {
     return { totalCount: filtered.length, data: movies };
   };
   render() {
+    
     const {
       length: movies_number,
       genres,
@@ -97,6 +102,9 @@ export default class Movies extends Component {
       selectedGenre,
       searchQuery,
     } = this.state;
+
+    const { user } = this.props;
+
     if (movies_number === 0)
       return (
         <div className="container text-center">
@@ -118,9 +126,11 @@ export default class Movies extends Component {
               selectedItem={selectedGenre}
               onItemSelect={this.handleGenreSelect}
             />
-            <Link to="/movies/new" className="btn btn-success mt-2">
-              New Movie
-            </Link>
+            {user && (
+              <Link to="/movies/new" className="btn btn-success mt-2">
+                New Movie
+              </Link>
+            )}
           </div>
           <div className="col-sm-9">
             <SearchBox value={searchQuery} onChange={this.handleSearch} />

@@ -78,21 +78,25 @@ class MovieForm extends Form {
   render() {
     const { editMode, genres } = this.state;
     return (
-      <div>
-        <h1>{editMode === false ? "Add" : "Edit"} Movie</h1>
-        <form onSubmit={this.handleSubmit}>
-          {this.renderInput("title", "Title")}
-          {this.renderSelect("genreId", "Genre", genres)}
-          {this.renderInput("numberInStock", "Number in Stock", "number")}
-          {this.renderInput("dailyRentalRate", "Rate")}
-          {/* {this.renderInput("liked", "Do you like it?", "checkbox", "checked")} */}
-          {this.renderButton(
-            editMode === false ? "Add Movie" : "Edit Movie",
-            "success",
-            "md"
-          )}
-          {this.renderButton("Back", "primary", "md")}
-        </form>
+      <div className="row">
+        <div className="col-sm-3"></div>
+        <div className="col-sm-6">
+          <h1>{editMode === false ? "Add" : "Edit"} Movie</h1>
+          <form onSubmit={this.handleSubmit}>
+            {this.renderInput("title", "Title")}
+            {this.renderSelect("genreId", "Genre", genres)}
+            {this.renderInput("numberInStock", "Number in Stock", "number")}
+            {this.renderInput("dailyRentalRate", "Rate")}
+            {/* {this.renderInput("liked", "Do you like it?", "checkbox", "checked")} */}
+            {this.renderButton(
+              editMode === false ? "Add Movie" : "Edit Movie",
+              "success",
+              "md"
+            )}
+            {/* {this.renderButton("Back", "primary", "md")} */}
+          </form>
+        </div>
+        <div className="col-sm-3"></div>
       </div>
     );
   }

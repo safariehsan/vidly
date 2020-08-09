@@ -2,11 +2,13 @@ import React from "react";
 import Form from "./common/form";
 import Joi from "joi-browser";
 import { toast } from "react-toastify";
+import * as userService from "../services/userService";
+import auth, { loginWithJwt } from '../services/authService';
 
 class RegisterForm extends Form {
   state = {
     data: { username: "", password: "", name: "" },
-    errors: { },
+    errors: {},
   };
   schema = {
     username: Joi.string().email().required().label("Username"),
@@ -14,9 +16,22 @@ class RegisterForm extends Form {
     name: Joi.string().required().label("Name"),
   };
 
-  doSubmit = () => {
-    // call the server
-    toast.info("Register Successful");
+  doSubmit = async () => {
+    try {
+      const response = await userService.register(this.state.data);
+      auth.loginWithJwt(response.headers['x-auth-token']);
+      //this.props.history.push("/movies");
+      window.location = '/movies';
+      toast.success("Register Successful");
+      
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = ex.response.data;
+        this.setState({ errors });
+        toast.error(`User «${this.state.data.username}» already registered`);
+      }
+    }
   };
 
   render() {
